@@ -4,7 +4,7 @@ import urllib.error
 import boto3
 
 GEMINI_MODEL = "gemini-2.5-flash"
-SECRET_NAME = "gemini-api-key-5"
+SECRET_NAME = "gemini_api_key1"
 REGION_NAME = "us-east-1"
 
 gemini_api_key1 = None
@@ -51,6 +51,7 @@ def extract_relevant_findings(terrascan_results: dict) -> dict:
         })
 
     return structured
+
 
 def build_prompt(findings: dict) -> str:
     return f"""

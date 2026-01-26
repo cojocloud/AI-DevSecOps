@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "gemini_api_key1" {
-  name        = "gemini-api-key-5"
+  name        = "gemini_api_key1"
   description = "Gemini API key for Terraform AI Review Agent"
 }
 
