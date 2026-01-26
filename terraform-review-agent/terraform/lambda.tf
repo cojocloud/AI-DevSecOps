@@ -7,7 +7,7 @@ resource "aws_lambda_function" "terraform_ai_reviewer" {
   timeout       = 60
 
   depends_on = [
-    aws_secretsmanager_secret_version.gemini_api_key_value,
+    aws_secretsmanager_secret_version.gemini_api_key1_value,
     aws_iam_role_policy_attachment.lambda_secrets_attach,
     aws_iam_role_policy_attachment.basic_logs
   ]
