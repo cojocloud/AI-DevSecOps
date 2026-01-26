@@ -7,21 +7,21 @@ GEMINI_MODEL = "gemini-2.5-flash"
 SECRET_NAME = "gemini-api-key-5"
 REGION_NAME = "us-east-1"
 
-GEMINI_API_KEY = None
+gemini_api_key1 = None
 
 
-def get_gemini_api_key():
-    global GEMINI_API_KEY
+def get_gemini_api_key1():
+    global gemini_api_key1
 
-    if GEMINI_API_KEY:
-        return GEMINI_API_KEY
+    if gemini_api_key1:
+        return gemini_api_key1
 
     client = boto3.client("secretsmanager", region_name=REGION_NAME)
     response = client.get_secret_value(SecretId=SECRET_NAME)
     secret = json.loads(response["SecretString"])
 
-    GEMINI_API_KEY = secret["GEMINI_API_KEY"]
-    return GEMINI_API_KEY
+    gemini_api_key1 = secret["gemini_api_key1"]
+    return gemini_api_key1
 
 
 def extract_relevant_findings(terrascan_results: dict) -> dict:
@@ -90,7 +90,7 @@ Findings:
 
 
 def call_gemini(prompt: str) -> str:
-    api_key = get_gemini_api_key()
+    api_key = get_gemini_api_key1()
 
     url = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
