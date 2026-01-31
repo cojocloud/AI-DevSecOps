@@ -50,7 +50,10 @@ resource "aws_acm_certificate" "mario_cert" {
 }
 resource "aws_acm_certificate_validation" "mario_cert_validation" {
   certificate_arn         = aws_acm_certificate.mario_cert.arn
-  validation_record_fqdns = [aws_route53_record.mario_cert_validation.fqdn]
+  validation_record_fqdns = [
+   for record in aws_route53_record.mario_cert_validation :
+    record.fqdn
+  ]
 }
 resource "aws_route53_record" "mario_cert_validation" {
   for_each = {
