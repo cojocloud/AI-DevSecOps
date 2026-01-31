@@ -23,7 +23,10 @@ resource "aws_lb_target_group" "app_tg" {
   }
 }
 
-
+locals {
+  domain = var.domain_name        # e.g. "example.com"
+  subdomain = var.service_subdomain  # e.g. "app"
+}
 
 
 
@@ -41,10 +44,56 @@ resource "aws_lb_listener" "https" {
 }
 
 resource "aws_acm_certificate" "mario_cert" {
-  domain_name       = "mario.cojocloudsolutions.com"
+  domain_name       = "${local.subdomain}.${local.domain}"
   validation_method = "DNS"
+  subject_alternative_names = []
 
   lifecycle {
     create_before_destroy = true
+  }
+  tags = {
+    Name = "${local.subdomain}-${local.domain}-cert"
+  }
+}
+
+# Use Route53 zone to validate DNS
+data "aws_route53_zone" "selected" {
+  name         = local.domain
+  private_zone = false
+}
+
+# Create DNS validation records
+resource "aws_route53_record" "cert_validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.cert.domain_validation_options :
+    dvo.domain_name => {
+      name   = dvo.resource_record_name
+      type   = dvo.resource_record_type
+      record = dvo.resource_record_value
+    }
+  }
+
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = each.value.name
+  type    = each.value.type
+  records = [each.value.record]
+  ttl     = 300
+}
+
+# Complete the DNS validation
+resource "aws_acm_certificate_validation" "cert_validation" {
+  certificate_arn         = aws_acm_certificate.cert.arn
+  validation_record_fqdns = [for rec in aws_route53_record.cert_validation : rec.fqdn]
+}
+
+resource "aws_route53_record" "app_alias" {
+  zone_id = data.aws_route53_zone.selected.zone_id
+  name    = local.subdomain
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.main.dns_name
+    zone_id                = aws_lb.main.zone_id
+    evaluate_target_health = true
   }
 }

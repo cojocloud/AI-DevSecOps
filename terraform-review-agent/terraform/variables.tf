@@ -9,3 +9,15 @@ variable "gemini_api_key1" {
   type        = string
   sensitive   = true
 }
+
+variable "domain_name" {
+  description = "Your base domain, e.g. example.com"
+  type        = string
+  default = "cojocloudsolutions.com"
+}
+
+variable "service_subdomain" {
+  description = "Subdomain for this service, e.g. app or www"
+  type        = string
+  default = "mario"
+}
