@@ -4,24 +4,24 @@ import urllib.error
 import boto3
 
 GEMINI_MODEL = "gemini-2.5-flash"
-SECRET_NAME = "gemini_api_key1"
+SECRET_NAME = "gemini_api_key3"
 REGION_NAME = "us-east-1"
 
-gemini_api_key1 = None
+gemini_api_key = None
 
 
-def get_gemini_api_key1():
-    global gemini_api_key1
+def get_gemini_api_key():
+    global gemini_api_key
 
-    if gemini_api_key1:
-        return gemini_api_key1
+    if gemini_api_key:
+        return gemini_api_key
 
     client = boto3.client("secretsmanager", region_name=REGION_NAME)
     response = client.get_secret_value(SecretId=SECRET_NAME)
     secret = json.loads(response["SecretString"])
 
-    gemini_api_key1 = secret["gemini_api_key1"]
-    return gemini_api_key1
+    gemini_api_key = secret["gemini_api_key3"]
+    return gemini_api_key
 
 
 def extract_relevant_findings(terrascan_results: dict) -> dict:
@@ -91,7 +91,7 @@ Findings:
 
 
 def call_gemini(prompt: str) -> str:
-    api_key = get_gemini_api_key1()
+    api_key = get_gemini_api_key()
 
     url = (
         f"https://generativelanguage.googleapis.com/v1beta/models/"
