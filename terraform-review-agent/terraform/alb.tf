@@ -29,30 +29,19 @@ locals {
 }
 
 
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.app_alb.arn
-  port              = 80
-  protocol          = "HTTP"
+# resource "aws_lb_listener" "http" {
+#   load_balancer_arn = aws_lb.app_alb.arn
+#   port              = 80
+#   protocol          = "HTTP"
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.app_tg.arn
-  }
-}
+#   default_action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.app_tg.arn
+#   }
+# }
 
 
-resource "aws_lb_listener" "https" {
-  load_balancer_arn = aws_lb.app_alb.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate.mario_cert.arn
 
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.app_tg.arn
-  }
-}
 
 resource "aws_acm_certificate" "mario_cert" {
   domain_name       = "${local.subdomain}.${local.domain}"
@@ -94,10 +83,24 @@ resource "aws_route53_record" "cert_validation" {
 }
 
 # Complete the DNS validation
-# resource "aws_acm_certificate_validation" "cert_validation" {
-#   certificate_arn         = aws_acm_certificate.mario_cert.arn
-#   validation_record_fqdns = [for rec in aws_route53_record.cert_validation : rec.fqdn]
-# }
+resource "aws_acm_certificate_validation" "cert_validation" {
+  certificate_arn         = aws_acm_certificate.mario_cert.arn
+  validation_record_fqdns = [for rec in aws_route53_record.cert_validation : rec.fqdn]
+}
+
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.app_alb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = aws_acm_certificate.mario_cert.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.app_tg.arn
+  }
+}
+
 
 
 resource "aws_route53_record" "app_cname" {
