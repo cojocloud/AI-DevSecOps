@@ -1,9 +1,6 @@
 name: Terraform-AI-Review-Agent
 
 on:
-  push:
-    branches: 
-      - main
   pull_request:
     paths:
       - "terraform-review-agent/**"
