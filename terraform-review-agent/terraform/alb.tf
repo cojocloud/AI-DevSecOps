@@ -24,8 +24,8 @@ resource "aws_lb_target_group" "app_tg" {
 }
 
 locals {
-  domain    = var.domain_name       # e.g. "example.com"
-  subdomain = var.service_subdomain # e.g. "app"
+  domain    = var.domain_name       
+  subdomain = var.service_subdomain 
 }
 
 
@@ -100,8 +100,6 @@ resource "aws_lb_listener" "https" {
     target_group_arn = aws_lb_target_group.app_tg.arn
   }
 }
-
-
 
 resource "aws_route53_record" "app_cname" {
   zone_id = data.aws_route53_zone.selected.zone_id
