@@ -172,3 +172,4 @@ def lambda_handler(event, context):
             "verdict": "REJECT",                     # fail closed
             "error": str(e)
         }
+    
