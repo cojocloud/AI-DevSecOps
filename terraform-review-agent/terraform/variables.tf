@@ -4,7 +4,7 @@ variable "project_name" {
   description = "Name of the project"
 }
 
-variable "gemini_api_key1" {
+variable "gemini_api_key2" {
   description = "Gemini API Key"
   type        = string
   sensitive   = true
@@ -13,11 +13,11 @@ variable "gemini_api_key1" {
 variable "domain_name" {
   description = "Your base domain, e.g. example.com"
   type        = string
-  default = "cojocloudsolutions.com"
+  default     = "cojocloudsolutions.com"
 }
 
 variable "service_subdomain" {
   description = "Subdomain for this service, e.g. app or www"
   type        = string
-  default = "mario"
+  default     = "mario"
 }
