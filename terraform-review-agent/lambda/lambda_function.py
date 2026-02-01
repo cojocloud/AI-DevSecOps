@@ -9,7 +9,6 @@ REGION_NAME = "us-east-1"
 
 gemini_api_key = None
 
-
 def get_gemini_api_key():
     global gemini_api_key
 
