@@ -12,3 +12,4 @@ output "application_url" {
   description = "Public HTTPS URL of the application"
   value       = "https://${local.subdomain}.${local.domain}"
 }
+
