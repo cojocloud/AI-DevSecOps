@@ -23,11 +23,6 @@ resource "aws_lb_target_group" "app_tg" {
   }
 }
 
-locals {
-  domain    = var.domain_name       
-  subdomain = var.service_subdomain 
-}
-
 
 # resource "aws_lb_listener" "http" {
 #   load_balancer_arn = aws_lb.app_alb.arn
@@ -41,7 +36,10 @@ locals {
 # }
 
 
-
+locals {
+  domain    = var.domain_name       # cojocloudsolutions.com
+  subdomain = var.service_subdomain # mario
+}
 
 resource "aws_acm_certificate" "mario_cert" {
   domain_name       = "${local.subdomain}.${local.domain}"
@@ -93,7 +91,9 @@ resource "aws_lb_listener" "https" {
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = aws_acm_certificate.mario_cert.arn
+  
+  certificate_arn = aws_acm_certificate_validation.cert_validation.certificate_arn
+
 
   default_action {
     type             = "forward"

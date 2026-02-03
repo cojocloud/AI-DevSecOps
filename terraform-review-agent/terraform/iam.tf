@@ -41,7 +41,7 @@ resource "aws_iam_policy" "lambda_secrets_policy" {
       {
         Effect   = "Allow"
         Action   = ["secretsmanager:GetSecretValue"]
-        Resource = aws_secretsmanager_secret.gemini_api_key3.arn
+        Resource = aws_secretsmanager_secret.gemini_api_key.arn
       }
     ]
   })
