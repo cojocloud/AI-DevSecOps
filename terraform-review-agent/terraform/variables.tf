@@ -4,7 +4,7 @@ variable "project_name" {
   description = "Name of the project"
 }
 
-variable "gemini_api_key3" {
+variable "gemini_api_key" {
   description = "Gemini API Key"
   type        = string
   sensitive   = true

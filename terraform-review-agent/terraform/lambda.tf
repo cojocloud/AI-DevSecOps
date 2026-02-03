@@ -5,9 +5,13 @@ resource "aws_lambda_function" "terraform_ai_reviewer" {
   runtime       = "python3.11"
   role          = aws_iam_role.lambda_role.arn
   timeout       = 60
-
+  environment {
+    variables = {
+      GEMINI_SECRET_NAME = aws_secretsmanager_secret.gemini_api_key.name
+    }
+  }
   depends_on = [
-    aws_secretsmanager_secret_version.gemini_api_key3_value,
+    aws_secretsmanager_secret_version.gemini_api_key_value,
     aws_iam_role_policy_attachment.lambda_secrets_attach,
     aws_iam_role_policy_attachment.basic_logs
   ]
