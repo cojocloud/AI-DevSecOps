@@ -8,21 +8,21 @@ GEMINI_MODEL = "gemini-2.5-flash"
 SECRET_NAME = os.environ["GEMINI_SECRET_NAME"]
 REGION_NAME = "us-east-1"
 
-_cached_api_key = None
+# _cached_api_key = None
 
-# gemini_api_key = None
+gemini_api_key = None
 
 def get_gemini_api_key():
-    global _cached_api_key
+    global gemini_api_key
 
-    if _cached_api_key:
-        return _cached_api_key
+    if gemini_api_key:
+        return gemini_api_key
 
     client = boto3.client("secretsmanager", region_name=REGION_NAME)
     response = client.get_secret_value(SecretId=SECRET_NAME)
     secret = json.loads(response["SecretString"])
 
-    gemini_api_key = secret["gemini_api_key3"]
+    gemini_api_key = secret["gemini_api_key"]
     return gemini_api_key
 
 
@@ -174,4 +174,3 @@ def lambda_handler(event, context):
             "verdict": "REJECT",                     # fail closed
             "error": str(e)
         }
-    
